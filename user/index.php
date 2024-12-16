@@ -1,58 +1,47 @@
 <?php
-include '../includes/db_connect.php';
+include '../db.php';
 
-$packages = fetchPackages($conn);
+$query = $pdo->query("SELECT * FROM paket");
+$pakets = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katering - Paket</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Sistem Katering</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="sweetalert2.min.js"></script>
-<link rel="stylesheet" href="sweetalert2.min.css">
 </head>
 <body>
+    <header>
+        <h1>Sistem Katering</h1>
+        <div class="cart-icon">
+            <span id="cart-count">0</span> 🛒
+        </ ```php
+        </div>
+    </header>
 
-<header>
-    <div class="container header-icons">
-        <h1>Katering Harian</h1>
-        <div class="chart-icon" onclick="viewChart()">
-    <img src="../images/cart-icon.png" alt="Cart Icon">
-    <span class="chart-badge" id="chartCount">0</span>
-    </div>
-
-    </div>
-</header>
-
-<div class="container">
-    <div class="grid">
-        <?php foreach ($packages as $package): ?>
-            <div class="card">
-                <img src="../images/<?php echo htmlspecialchars($package['image']); ?>" alt="Image">
-                <div class="card-body">
-                    <h3><?php echo htmlspecialchars($package['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($package['description']); ?></p>
-                    <p class="price">Rp<?php echo number_format($package['price'], 0, ',', '.'); ?></p>
-                    <button onclick="orderPackage('<?php echo $package['id']; ?>')">Pesan Sekarang</button>
-                </div>
+    <main>
+        <div class="package">
+            <img src="https://example.com/ayam10.jpg" alt="Paket Ayam 10" class="package-image">
+            <h2>Paket Ayam 10</h2>
+            <p>Deskripsi: Ayam 10, Sayur 10, Nasi, dan lain-lain.</p>
+            <button class="buy-now" onclick="buyNow(1)">Beli Langsung</button>
+            <button class="add-to-cart" onclick="addToCart(1)">Masukkan ke Keranjang</button>
+        </div>
+        <?php foreach ($pakets as $paket): ?>
+            <div class="package">
+                <img src="<?php echo $paket['gambar']; ?>" alt="<?php echo $paket['nama']; ?>" class="package-image">
+                <h2><?php echo $paket['nama']; ?></h2>
+                <p><?php echo $paket['deskripsi']; ?></p>
+                <button class="buy-now" onclick="buyNow(<?php echo $paket['id']; ?>)">Beli Langsung</button>
+                <button class="add-to-cart" onclick="addToCart(<?php echo $paket['id']; ?>)">Masukkan ke Keranjang</button>
             </div>
         <?php endforeach; ?>
-    </div>
-</div>
+    </main>
 
-<footer>
-    <p>
-        © 2024 Katering Harian. 
-        <button onclick="goToAdmin()">Akses Admin</button>
-    </p>
-</footer>
-
-<script src="../vendor/sweetalert/sweetalert2.all.min.js"></script>
-<script src="../js/script.js"></script>
-
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
